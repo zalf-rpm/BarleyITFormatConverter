@@ -20,6 +20,12 @@ To compile it you need NuGet package Newtonsoft.Json
 What you get:
 Three output files will be generated into the output folder. 
 Filenames are hardcoded.
+
 climate-min.csv
+
 site-min.json
+
 crop-min.json
+
+Note:
+"include-file-base-path" in sim.json must be configured to find the includes from monica-parameters project  
