@@ -10,9 +10,16 @@ AgMIPToMonicaConverter.exe
 
 Parameter:
 -filename <path + filename>  --- input file path
--out <path>                  --- output path folder
+-out <path>                  --- (optional) output path folder - default = %userprofile%/documents/AgMIPToMonicaOut
 
 Dependency:
 Converter uses Newtonsoft.Json.dll
 
 To compile it you need NuGet package Newtonsoft.Json
+
+What you get:
+Three output files will be generated into the output folder. 
+Filenames are hardcoded.
+climate-min.csv
+site-min.json
+crop-min.json
