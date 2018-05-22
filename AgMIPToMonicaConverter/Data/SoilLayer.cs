@@ -23,7 +23,6 @@ namespace AgMIPToMonicaConverter.Data
         {
             public double Thickness {get; set;}
             public double SoilOrganicCarbon { get; set; }
-          //  public double SoilRawDensity { get; set; }
             public double SoilBulkDensity { get; set; }
             public double Sand { get; set; }
             public double Clay { get; set; }
@@ -57,7 +56,6 @@ namespace AgMIPToMonicaConverter.Data
             soilLayer.SoilBulkDensity = bulkDensity * 1000; // g/cm3 -> kg/m3
             soilLayer.Sand = sand * 0.01; // recheck
             soilLayer.Clay = clay * 0.01;
-           // soilLayer.SoilRawDensity = (bulkDensity - (0.009 * clay)) * 1000.0;
             soilLayer.PoreVolume = saturation * 0.01;
             soilLayer.PermanentWiltingPoint = wiltingPoint * 0.01; //vol% [0-1] (m3/m3)
             soilLayer.FieldCapacity = fieldCapacity * 0.01; // vol% [0-1] (m3/m3)
@@ -116,7 +114,6 @@ namespace AgMIPToMonicaConverter.Data
                                             select new JObject(
                                                 new JProperty("Thickness", new JArray(p.Thickness, "m")),
                                                 new JProperty("SoilOrganicCarbon", new JArray(p.SoilOrganicCarbon, "%")),
-                                                //new JProperty("SoilRawDensity", new JArray(p.SoilRawDensity, "kg m-3")),
                                                 new JProperty("SoilBulkDensity", new JArray(p.SoilBulkDensity, "kg m-3")),
                                                 new JProperty("Sand", p.Sand),
                                                 new JProperty("Clay", p.Clay),
