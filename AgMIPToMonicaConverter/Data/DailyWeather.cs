@@ -13,7 +13,7 @@ namespace AgMIPToMonicaConverter.Data
     {
         /// <summary> output filename
         /// </summary>
-        public static readonly string CLIMATE_FILENAME = "climate-min.csv";
+        public static readonly string CLIMATE_FILENAME = "climate.csv";
         /// <summary> define column names for csv file
         /// </summary>
         public static readonly string[] MinWeatherData = { "iso-date", "tavg", "tmin", "tmax", "wind", "globrad", "precip", "relhumid" };

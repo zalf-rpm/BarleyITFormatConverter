@@ -12,7 +12,7 @@ namespace AgMIPToMonicaConverter.Data
     {
         /// <summary> output filename
         /// </summary>
-        private static readonly string CROP_FILENAME = "crop-min.json";
+        private static readonly string CROP_FILENAME = "crop.json";
 
         /// <summary> internal class for workstep 
         /// </summary>

@@ -12,7 +12,7 @@ namespace AgMIPToMonicaConverter.Data
     {
         /// <summary> output filename
         /// </summary>
-        public static readonly string SITE_FILENAME = "site-min.json";
+        public static readonly string SITE_FILENAME = "site.json";
         /// <summary> tiny value for comparing 
         /// </summary>
         private static readonly double TINY = 0.001;
