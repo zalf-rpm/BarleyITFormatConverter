@@ -1,7 +1,7 @@
 {
-	"crop.json": "crop-min.json",
-	"site.json": "site-min.json",
-	"climate.csv": "climate-min.csv",
+	"crop.json": "crop.json",
+	"site.json": "site.json",
+	"climate.csv": "climate.csv",
 
 	"climate.csv-options": {
 		"no-of-climate-file-header-lines": 2,
