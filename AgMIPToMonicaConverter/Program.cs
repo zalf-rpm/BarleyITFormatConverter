@@ -11,7 +11,7 @@ namespace AgMIPToMonicaConverter
         {
             // default filename in same folder as executable
             string filename = "Barley_IT_AgMIP.json";
-            string filenameErrorOut = "filenameErrorOut.txt";
+            string filenameErrorOut = "errorOut.txt";
             // default output path to user Documents
             string outpath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + Path.DirectorySeparatorChar + "AgMIPToMonicaOut";
             for (int i = 0; i < args.Length; i++)
