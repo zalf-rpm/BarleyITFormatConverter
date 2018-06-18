@@ -36,3 +36,5 @@ crop-min.json
 Note:
 
 "include-file-base-path" in sim.json must be configured to find the includes from monica-parameters project  
+
+In case of an error the system will generate a errorOut.txt with detailed informations. 
