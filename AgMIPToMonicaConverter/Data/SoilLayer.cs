@@ -16,6 +16,9 @@ namespace AgMIPToMonicaConverter.Data
         /// <summary> tiny value for comparing 
         /// </summary>
         private static readonly double TINY = 0.001;
+        /// <summary> error file not written
+        /// </summary>
+        public static readonly string MissingSoilErrorMsg = string.Format("Soil Data missing, no {0} file written!\r\n", SITE_FILENAME);
 
         /// <summary> internal class for soil layer
         /// </summary>
@@ -66,31 +69,53 @@ namespace AgMIPToMonicaConverter.Data
         /// </summary>
         /// <param name="outpath"></param>
         /// <param name="agMipJson"></param>
-        public static void ExtractSoilData(string outpath, JObject agMipJson)
+        public static void ExtractSoilData(string outpath, JObject agMipJson, ref string errorOut)
         {
-            IList<JToken> results = agMipJson["soils"].First["soilLayer"].Children().ToList();
+            IList<JToken> results;
+            try
+            {
+                results = agMipJson["soils"].First["soilLayer"].Children().ToList();
+                if (results.Count == 0)
+                {
+                    Console.WriteLine(SiteData.MissingSoilErrorMsg);
+                    errorOut += SiteData.MissingSoilErrorMsg;
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine(SiteData.MissingSoilErrorMsg);
+                errorOut += SiteData.MissingSoilErrorMsg;
+                return;
+            }
+
             List<SoilLayer> soilLayers = new List<SoilLayer>();
+            List<string> soilParameter = new List<string>() { "depth","sllt","sllb","sloc","slic","slwp","slfc1","slsat","sabdm","slsnd","slcly","slsil"};
             foreach (JToken token in results)
             {
-                double depth = (double)token["depth"].ToObject(typeof(double)); // not documented in standard = thickness
-                double soilTopLayerDepth = (double)token["sllt"].ToObject(typeof(double));
-                double soilBaseLayerDepth = (double)token["sllb"].ToObject(typeof(double));
+                if (!Util.HasMissingParameter(soilParameter, "soil", token, ref errorOut))
+                {
+                    double depth = (double)token["depth"].ToObject(typeof(double)); // not documented in standard = thickness
+                    double soilTopLayerDepth = (double)token["sllt"].ToObject(typeof(double));
+                    double soilBaseLayerDepth = (double)token["sllb"].ToObject(typeof(double));
 
-                double soilOrganicCarbonLayer = (double)token["sloc"].ToObject(typeof(double));
-                double inertOrganicCarbonLayer = (double)token["slic"].ToObject(typeof(double));    // Inert organic carbon by layer
+                    double soilOrganicCarbonLayer = (double)token["sloc"].ToObject(typeof(double));
+                    double inertOrganicCarbonLayer = (double)token["slic"].ToObject(typeof(double));    // Inert organic carbon by layer
 
-                double wiltingPoint = (double)token["slwp"].ToObject(typeof(double));  // Soil water content (wilting point) at 15 atmosphere pressure
-                double fieldWaterCapacity = (double)token["slfc1"].ToObject(typeof(double)); // Soil water content at 1/3 atmosphere pressure
-                double saturation = (double)token["slsat"].ToObject(typeof(double)); // Soil water, saturated
+                    double wiltingPoint = (double)token["slwp"].ToObject(typeof(double));  // Soil water content (wilting point) at 15 atmosphere pressure
+                    double fieldWaterCapacity = (double)token["slfc1"].ToObject(typeof(double)); // Soil water content at 1/3 atmosphere pressure
+                    double saturation = (double)token["slsat"].ToObject(typeof(double)); // Soil water, saturated
 
-                double bulkDensity = (double)token["sabdm"].ToObject(typeof(double)); // 	Soil bulk density, moist, determined on field sample g/cm3	
+                    double bulkDensity = (double)token["sabdm"].ToObject(typeof(double)); // 	Soil bulk density, moist, determined on field sample g/cm3	
 
-                double sand = (double)token["slsnd"].ToObject(typeof(double));
-                double clay = (double)token["slcly"].ToObject(typeof(double));
-                double silt = (double)token["slsil"].ToObject(typeof(double)); //schluff
-                SoilLayer soilLayer = SiteData.FromAgMIP(soilTopLayerDepth, soilBaseLayerDepth, depth, soilOrganicCarbonLayer, bulkDensity, sand, clay, saturation, wiltingPoint, fieldWaterCapacity);
-                soilLayers.Add(soilLayer);
+                    double sand = (double)token["slsnd"].ToObject(typeof(double));
+                    double clay = (double)token["slcly"].ToObject(typeof(double));
+                    double silt = (double)token["slsil"].ToObject(typeof(double)); //schluff
+                    SoilLayer soilLayer = SiteData.FromAgMIP(soilTopLayerDepth, soilBaseLayerDepth, depth, soilOrganicCarbonLayer, bulkDensity, sand, clay, saturation, wiltingPoint, fieldWaterCapacity);
+                    soilLayers.Add(soilLayer);
+                }     
             }
+
             SaveSoilData(outpath, soilLayers);
         }
 

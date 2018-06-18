@@ -49,6 +49,7 @@
     <Compile Include="Data\Cultivation.cs" />
     <Compile Include="Data\DailyWeather.cs" />
     <Compile Include="Data\SoilLayer.cs" />
+    <Compile Include="Data\Util.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

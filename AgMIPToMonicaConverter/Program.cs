@@ -10,7 +10,8 @@ namespace AgMIPToMonicaConverter
         static void Main(string[] args)
         {
             // default filename in same folder as executable
-            string filename = "Barley_IT_AgMIP.json"; 
+            string filename = "Barley_IT_AgMIP.json";
+            string filenameErrorOut = "filenameErrorOut.txt";
             // default output path to user Documents
             string outpath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + Path.DirectorySeparatorChar + "AgMIPToMonicaOut";
             for (int i = 0; i < args.Length; i++)
@@ -58,14 +59,21 @@ namespace AgMIPToMonicaConverter
             {
                 string jsonText = File.ReadAllText(filename);
                 JObject agMipJson = JObject.Parse(jsonText);
-                ClimateData.ExtractWeatherData(outpath, agMipJson);
-                SiteData.ExtractSoilData(outpath, agMipJson);
+                string errorOut = "";
+                ClimateData.ExtractWeatherData(outpath, agMipJson, ref errorOut);
+                SiteData.ExtractSoilData(outpath, agMipJson, ref errorOut);
                 Cultivation.ExtractCropData(outpath, agMipJson);
+
+                if (!string.IsNullOrWhiteSpace(errorOut))
+                {
+                    File.WriteAllText(outpath + Path.DirectorySeparatorChar + filenameErrorOut, errorOut.ToString());
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("An error occured:");
                 Console.WriteLine(ex.Message);
+                Console.ReadKey();
                 Environment.Exit(10);
             }
         }

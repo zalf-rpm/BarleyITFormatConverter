@@ -123,7 +123,7 @@ namespace AgMIPToMonicaConverter.Data
         {
             List<Cultivation.CropRoationWorkstep> cropRoationWorksteps = new List<Cultivation.CropRoationWorkstep>();
             IList<JToken> eventData = agMipJson["experiments"].First["management"]["events"].Children().ToList();
-            double yield = (double)agMipJson["experiments"].First["observed"]["hwam"].ToObject(typeof(double)); //  (dry wt) kg/ha
+            //double yield = (double)agMipJson["experiments"].First["observed"]["hwam"].ToObject(typeof(double)); //  (dry wt) kg/ha
 
             string plantingDateStr = agMipJson["experiments"].First["management"]["pdate"].ToString();
             string harvestDateStr = agMipJson["experiments"].First["management"]["hadate"].ToString();

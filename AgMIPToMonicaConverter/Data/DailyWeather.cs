@@ -42,24 +42,28 @@ namespace AgMIPToMonicaConverter.Data
         /// </summary>
         /// <param name="outpath"> out path</param>
         /// <param name="agMipJson"> agMipJson object </param>
-        public static void ExtractWeatherData(string outpath, JObject agMipJson)
+        public static void ExtractWeatherData(string outpath, JObject agMipJson, ref string errorOut)
         {
             IList<JToken> results = agMipJson["weathers"].First["dailyWeather"].Children().ToList();
 
             List<DailyWeather> dailyWeathers = new List<DailyWeather>();
+            List<string> parameters = new List<string>{ "w_date", "rain", "tavd", "tmin", "tmax", "rhavd", "srad", "wind" };
 
             foreach (JToken token in results)
             {
-                String date = token["w_date"].ToString();
-                double rain = (double)token["rain"].ToObject(typeof(double));
-                double tavg = (double)token["tavd"].ToObject(typeof(double));
-                double tmin = (double)token["tmin"].ToObject(typeof(double));
-                double tmax = (double)token["tmax"].ToObject(typeof(double));
-                double humidity = (double)token["rhavd"].ToObject(typeof(double));
-                double radiation = (double)token["srad"].ToObject(typeof(double));
-                double wind = (double)token["wind"].ToObject(typeof(double));
-                DailyWeather dailyWeather = ClimateData.FromAgMIP(date, tavg, tmin, tmax, radiation, rain, humidity, wind);
-                dailyWeathers.Add(dailyWeather);
+                if (!Util.HasMissingParameter(parameters, "climate", token, ref errorOut))
+                {
+                    String date = token["w_date"].ToString();
+                    double rain = (double)token["rain"].ToObject(typeof(double));
+                    double tavg = (double)token["tavd"].ToObject(typeof(double));
+                    double tmin = (double)token["tmin"].ToObject(typeof(double));
+                    double tmax = (double)token["tmax"].ToObject(typeof(double));
+                    double humidity = (double)token["rhavd"].ToObject(typeof(double));
+                    double radiation = (double)token["srad"].ToObject(typeof(double));
+                    double wind = (double)token["wind"].ToObject(typeof(double));
+                    DailyWeather dailyWeather = ClimateData.FromAgMIP(date, tavg, tmin, tmax, radiation, rain, humidity, wind);
+                    dailyWeathers.Add(dailyWeather);
+                }
             }
             SaveClimateData(outpath, dailyWeathers);
         }
