@@ -5,7 +5,7 @@ pipeline {
             agent { label 'windows' }
             steps {
                 echo 'Building..'
-                def returnValueBuild = bat returnStatus: true, script: 'msbuild AgMIPToMonicaConverter.sln /T:Rebuild /P:Configuration=Release /m"'
+                bat returnStatus: true, script: 'msbuild AgMIPToMonicaConverter.sln /T:Rebuild /P:Configuration=Release /m"'
             }
         }
         stage('Test') {
